@@ -3,7 +3,7 @@ function funcao_plotar_caminho_robo(arquivo)
 load(arquivo);
 
 g = figure(2);
-set(g,'name','Resultado final - trajetória executada pelo robô');
+set(g,'name','Resultado final - trajetÃ³ria executada pelo robÃ´');
 plot(P(1,:),P(2,:))
 axis equal
 hold on

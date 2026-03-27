@@ -28,7 +28,7 @@ tempo_total = tic; % controle de custo computacional (debug apenas)
 joy_manual = 0; % joy_manual igual a 1 p usar o joystick. joy_manual igual a 0 para usar controle automático (controle_e_navegacao)
 
 %% Simulador do Calma-N
-     CALMA_N_SIMULADOR(experimento,robo,mapabmp,tipodeplot,tempo_max,joy_manual);
+CALMA_N_SIMULADOR(experimento,robo,mapabmp,tipodeplot,tempo_max,joy_manual);
 
 toc(tempo_total) % controle de custo computacional (debug apenas)
 %% Funções para visualização do resultado

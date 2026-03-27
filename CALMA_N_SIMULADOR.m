@@ -1,23 +1,23 @@
 function CALMA_N_SIMULADOR(experimento,robo,mapabmp,tipodeplot,tempo_max,joy_manual)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AQUI VAI O C”DIGO DO P3DX_SIM_CONTROL QUE VAI COME«AR COMO O BOT√O %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AQUI VAI O C√ìDIGO DO P3DX_SIM_CONTROL QUE VAI COME√áAR COMO O BOT√ÉO %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% inicializaÁ„o das vari·veis globais
+% inicializa√ß√£o das vari√°veis globais
 global Pos Pdes v_sensor s s2 angs Mapa Mapa2 i tempo tamos;
 
-colidiu = 0; % verifica se o robÙ colidiu para finalizar a simulaÁ„o
-raio_robo = robo.raio; %raio para verificar colis„o e plotar o robÙ
-tamos = experimento.tamos; % tempo de amostragem da simulaÁ„o em segundos
-% janela de observaÁ„o para navegaÁ„o em primeira pessoa
-janela = robo.saturacao; %saturaÁ„o do sensor
-%inicializaÁ„o do ruido de mediÁ„o em [%]
+colidiu = 0; % verifica se o rob√¥ colidiu para finalizar a simula√ß√£o
+raio_robo = robo.raio; %raio para verificar colis√£o e plotar o rob√¥
+tamos = experimento.tamos; % tempo de amostragem da simula√ß√£o em segundos
+% janela de observa√ß√£o para navega√ß√£o em primeira pessoa
+janela = robo.saturacao; %satura√ß√£o do sensor
+%inicializa√ß√£o do ruido de medi√ß√£o em [%]
 ruido = robo.ruido;
-% inicializaÁ„o da posiÁ„o do robÙ
+% inicializa√ß√£o da posi√ß√£o do rob√¥
 x = experimento.rbx;
 y = experimento.rby;
 theta = experimento.ang*pi/180; % inicia orientado para o eixo x do plano
-Pos = [x ; y ; theta]; % È a posiÁ„o atual do robÙ (aqui È a posiÁ„o inicial).
+Pos = [x ; y ; theta]; % √© a posi√ß√£o atual do rob√¥ (aqui √© a posi√ß√£o inicial).
 
 %% carregando o mapa do ambiente
 A = imread(mapabmp);
@@ -26,11 +26,11 @@ A = A./(max(max(A)));
 A = A.*255;
 %A = rgb2gray(A);
 Mapa2 = A;
-% A2 = A(end:-1:1,:); % utilizada no plot para parecer a imagem no SC padr„o
+% A2 = A(end:-1:1,:); % utilizada no plot para parecer a imagem no SC padr√£o
 [Ay , Ax] = find(A~=255);
 Mapa = [Ax,Ay]';
 
-% vari·veis para acelerar a simulaÁ„o sensorial
+% vari√°veis para acelerar a simula√ß√£o sensorial
 [ymaxA , xmaxA] = size(A);
 AA = [255*ones(ymaxA,janela) A 255*ones(ymaxA,janela)];
 AA = [255*ones(janela, xmaxA+2*janela) ; AA ; 255*ones(janela, xmaxA+2*janela)];
@@ -42,33 +42,33 @@ Pvel = zeros(2,round(tempo_max/tamos));
 Pvel_medido = zeros(2,round(tempo_max/tamos));
 Pfi = zeros(2,round(tempo_max/tamos));
 Pfi_real = zeros(2,round(tempo_max/tamos));
-X = [0 ; 0 ; 0 ; 0 ; 0 ; 0]; % estado do sistema para simulaÁ„o din‚mica
+X = [0 ; 0 ; 0 ; 0 ; 0 ; 0]; % estado do sistema para simula√ß√£o din√¢mica
 
-%% inicializaÁ„o da posiÁ„o de destino do robÙ
+%% inicializa√ß√£o da posi√ß√£o de destino do rob√¥
 Pdes = [experimento.dx ; experimento.dy ];
 
 
-%% definiÁ„o dos ‚ngulos dos sensores
+%% defini√ß√£o dos √¢ngulos dos sensores
 resang = 2;
 angs = (0:resang:360-resang)*pi/180;
 
-%% inicializaÁ„o dos sensores com zero
+%% inicializa√ß√£o dos sensores com zero
 s = zeros(2,length(angs));
 s_i = s;
-s2 = s; %sensor com ruÌdo de mediÁ„o no SC do ambiente
+s2 = s; %sensor com ru√≠do de medi√ß√£o no SC do ambiente
 
-% limite do campo de vis„o para primeira pessoa.
-% [vlimitex,vlimitey] = scircle2(0,0,1,0); % circulo limite de vis„o MATLAB
+% limite do campo de vis√£o para primeira pessoa.
+% [vlimitex,vlimitey] = scircle2(0,0,1,0); % circulo limite de vis√£o MATLAB
 aux = linspace(0,2*pi*100,100);
 vlimitex = cos(aux)';
 vlimitey = sin(aux)';
 xc = vlimitex*raio_robo';
 yc = vlimitey*raio_robo';
 
-%% inicializaÁ„o das vari·veis do loop while
+%% inicializa√ß√£o das vari√°veis do loop while
 Vmedido = 0;
 Wmedido = 0;
-dist = sqrt( (Pdes(1)-Pos(1))^2 + (Pdes(2)-Pos(2))^2 ); % dist‚ncia linear para o destino
+dist = sqrt( (Pdes(1)-Pos(1))^2 + (Pdes(2)-Pos(2))^2 ); % dist√¢ncia linear para o destino
 i = 0;  % contador
 tempo = 0:tamos:tempo_max;  % controle de tempo
 
@@ -76,21 +76,21 @@ tempo = 0:tamos:tempo_max;  % controle de tempo
 while  (((abs(dist) > 5) || (abs(Vmedido) > 10) || abs(Wmedido) > 1) && (colidiu == 0) && i*tamos<tempo_max)
       % distancia maior que 5 cm ou vlin maior q 5 cm/s ou vrot maior que 0.1 rad/s
 
-    % atualizaÁ„o das vari·veis de controle de tempo
+    % atualiza√ß√£o das vari√°veis de controle de tempo
     i = i+1;
     tempo(i) = (i-1)*tamos;
 
     simulacao_sensores
 
-    %% %%%%%%%%%%%%%%%%% CONTROLADOR INÕCIO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% %%%%%%%%%%%%%%%%% CONTROLADOR IN√çCIO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %s_i = sensores no sistema de coordenadas do ambiente
-    %    = sem ruÌdo e n„o deve ser usado pelo controlador
+    %    = sem ru√≠do e n√£o deve ser usado pelo controlador
 
-    %s = sensores no sistema de coordenadas do robÙ
-    %  = com ruÌdo adicionado. Esse pode ser utilizado pelo controlador.
+    %s = sensores no sistema de coordenadas do rob√¥
+    %  = com ru√≠do adicionado. Esse pode ser utilizado pelo controlador.
 
     %s2 = sensores no sistema de coordenadas do ambiente
-    %  = com ruÌdo adicionado. Esse pode ser utilizado pelo controlador.
+    %  = com ru√≠do adicionado. Esse pode ser utilizado pelo controlador.
     tamos_controle = 0.05; %atualizar a cada 40 ms
     if (mod(tempo(i),tamos_controle)==0)
         if joy_manual == 1
@@ -121,9 +121,9 @@ while  (((abs(dist) > 5) || (abs(Vmedido) > 10) || abs(Wmedido) > 1) && (colidiu
             end
             fPdes = Pdes/100;
             fPos = [Pos(1)/100 ; Pos(2)/100 ; Pos(3)];
-            [V , W] = controle_e_navegacao_roose(fPos,fPdes,encoder,v_lidar,fs2,fs,angs,mapa,mapa2,i,tempo,Vmax,Wmax);
+            [V , W] = controle_e_navegacao(fPos,fPdes,encoder,v_lidar,fs2,fs,angs,mapa,mapa2,i,tempo,Vmax,Wmax);
 
-            %saturaÁ„o das velocidades com prioridade para angular
+            %satura√ß√£o das velocidades com prioridade para angular
             if W > Wmax, W = Wmax; end
             if W < -Wmax, W = -Wmax; end
             Vmax_w = Vmax*(1-abs(W)/Wmax);
@@ -139,7 +139,7 @@ while  (((abs(dist) > 5) || (abs(Vmedido) > 10) || abs(Wmedido) > 1) && (colidiu
         end
         Ud = U;
     end
-    if abs(U(1)) > robo.fi_max  %limita ao m·ximo que o foi determinado para o robÙ que È 33.2 rad/s =~ 35 Pulsos/10ms
+    if abs(U(1)) > robo.fi_max  %limita ao m√°ximo que o foi determinado para o rob√¥ que √© 33.2 rad/s =~ 35 Pulsos/10ms
         U(1) = sign(U(1))*robo.fi_max;
     end
     if abs(U(2)) > robo.fi_max
@@ -147,17 +147,17 @@ while  (((abs(dist) > 5) || (abs(Vmedido) > 10) || abs(Wmedido) > 1) && (colidiu
     end
     %% %%%%%%%%%%%%%%%%%%% CONTROLADOR FIM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    %% SIMULA«√O do robÙ
-    R = [cos(Pos(3)) sin(Pos(3)) 0 ; -sin(Pos(3)) cos(Pos(3)) 0 ; 0 0 1]; % matriz de rotaÁ„o
-    [Ksir_real, X] = dinamica_calma_n(U,robo,tamos,X); %retorna as velocidades V e W reais no SC do robÙ
+    %% SIMULA√á√ÉO do rob√¥
+    R = [cos(Pos(3)) sin(Pos(3)) 0 ; -sin(Pos(3)) cos(Pos(3)) 0 ; 0 0 1]; % matriz de rota√ß√£o
+    [Ksir_real, X] = dinamica_calma_n(U,robo,tamos,X); %retorna as velocidades V e W reais no SC do rob√¥
 
     Ksi_I = R\Ksir_real; % coloca as velocidades V e W reais no SC do ambiente
-    Pos = Pos + Ksi_I*tamos; % atualizaÁ„o da posiÁ„o do robÙ (integraÁ„o no SC do ambiente)
+    Pos = Pos + Ksi_I*tamos; % atualiza√ß√£o da posi√ß√£o do rob√¥ (integra√ß√£o no SC do ambiente)
     % converte theta para -pi a pi
     if Pos(3) > pi, Pos(3) = Pos(3) - 2*pi; end
     if Pos(3) < -pi, Pos(3) = Pos(3) + 2*pi; end
 
-    %% organizaÁ„o das vari·veis para plot dos resultados
+    %% organiza√ß√£o das vari√°veis para plot dos resultados
 
     Vmedido = Ksir_real(1);
     Wmedido = Ksir_real(3);
@@ -167,20 +167,20 @@ while  (((abs(dist) > 5) || (abs(Vmedido) > 10) || abs(Wmedido) > 1) && (colidiu
 
     Ksir_d = robo.Modcin*Ud; % converte para comandos de velocidade (apenas para registro e plots futuros)
 
-    Pvel(:,i+1) = Ksir_d; % atualiza o vetor das velocidades (comandos) do robÙ durante o experimento - desejadas.
-    Pvel_medido(:,i+1) = [Vmedido ; Wmedido]; % atualiza o vetor das velocidades reais do robÙ durante o experimento.
-    P(:,i+1) = Pos; % atualiza o vetor das posiÁıes do robÙ durante o experimento (SC do ambiente).
+    Pvel(:,i+1) = Ksir_d; % atualiza o vetor das velocidades (comandos) do rob√¥ durante o experimento - desejadas.
+    Pvel_medido(:,i+1) = [Vmedido ; Wmedido]; % atualiza o vetor das velocidades reais do rob√¥ durante o experimento.
+    P(:,i+1) = Pos; % atualiza o vetor das posi√ß√µes do rob√¥ durante o experimento (SC do ambiente).
     Pfi(:,i+1) = Ud; % U = [Fi_e ; Fi_d] % valor desejado de fi
     Pfi_real(:,i+1) = Fi; % U = [Fi_e ; Fi_d] % valor real de fi
 
-    dist = sqrt( (Pdes(1)-Pos(1))^2 + (Pdes(2)-Pos(2))^2 ); % atualiza a dist‚ncia para o destino
+    dist = sqrt( (Pdes(1)-Pos(1))^2 + (Pdes(2)-Pos(2))^2 ); % atualiza a dist√¢ncia para o destino
 
-    % PLOT DO GR¡FICO "ON LINE"
+    % PLOT DO GR√ÅFICO "ON LINE"
     plot_graficos_online
 
 end
 
-%% finalizaÁ„o dos vetores e salvando o arquivo do experimento
+%% finaliza√ß√£o dos vetores e salvando o arquivo do experimento
 tempo = tempo(1:i+1);
 P = P(:,1:i+1);
 Pvel = Pvel(:,1:i+1);
