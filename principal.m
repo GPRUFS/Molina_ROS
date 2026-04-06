@@ -3,16 +3,17 @@ close all
 clc
 
 %% Configuração das características do experimento simulado (Apenas para SIMULAÇÃO).
-experimento.rbx = 50; %posição inicial do robô no eixo x [cm] (apenas para a simulação)
-experimento.rby = 50; %posição inicial do robô no eixo y [cm] (apenas para a simulação)
+experimento.rbx = 200; %posição inicial do robô no eixo x [cm] (apenas para a simulação)
+experimento.rby = 530; %posição inicial do robô no eixo y [cm] (apenas para a simulação)
 experimento.ang = 0;  %orientação do robô em relação ao eixo x do ambiente [graus] (apenas para a simulação)
-experimento.tamos = 0.02; %tempo de amostragem em segundos (10 ms) (apenas para a simulação)
+experimento.tamos = 0.05; %tempo de amostragem em segundos (10 ms) (apenas para a simulação)
 % mapabmp = 'vazio.bmp'; % mapa do ambiente simulado (apenas para a simulação)
-mapabmp = 'mapareal.bmp'; % mapa do ambiente simulado (apenas para a simulação)
+##mapabmp = 'mapareal.bmp'; % mapa do ambiente simulado (apenas para a simulação)
+mapabmp = 'mapa_lab.bmp'; % mapa do ambiente simulado (apenas para a simulação)
 
 %% Posição de destino desejada (ambiente de experimento para o robô real vai até (X,Y) = (580,320) aproximadamente (em centímetros)
-experimento.dx = 500; %posição de destino no eixo x [cm]
-experimento.dy = 300; %posição de destino no eixo y [cm]
+experimento.dx = 1460; %posição de destino no eixo x [cm]
+experimento.dy = 318; %posição de destino no eixo y [cm]
 
 %% Carregando o modelo Kinodinâmico do Zuadento
 configuracao_robo
